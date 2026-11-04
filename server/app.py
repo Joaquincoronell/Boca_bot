@@ -16,7 +16,7 @@ from pydantic import BaseModel, Field
 from playwright.async_api import async_playwright
 
 app = FastAPI(title="Boca Bot Server", docs_url=None, redoc_url=None)
-DATA = Path(os.getenv("BOCA_DATA_DIR", "/data"))
+DATA = Path(os.getenv("BOCA_DATA_DIR", str(Path.home() / ".boca_bot_data")))
 DATA.mkdir(parents=True, exist_ok=True)
 CONFIG_FILE = DATA / "config.json"
 SESSION_FILE = DATA / "session.enc"
