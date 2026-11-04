@@ -11,6 +11,7 @@ from pathlib import Path
 import httpx
 from cryptography.fernet import Fernet, InvalidToken
 from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 from playwright.async_api import async_playwright
 
@@ -112,6 +113,26 @@ async def authorize(request: Request):
         raise HTTPException(401, "No autorizado")
     if not secrets.compare_digest(header[7:], API_TOKEN):
         raise HTTPException(401, "No autorizado")
+
+
+@app.get("/", response_class=HTMLResponse)
+async def home():
+    # Landing pública sin detalles de sesión ni credenciales.
+    return """<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Boca Bot | Servidor</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f5f7fb;color:#13284c;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:24px}
+main{width:100%;max-width:520px;background:#fff;border:1px solid #e5eaf3;border-radius:20px;padding:35px;box-shadow:0 14px 45px #0c214014}
+h1{font-size:30px;margin:8px 0 14px}.eyebrow{font-weight:800;letter-spacing:.1em;color:#286de5;font-size:13px}.status{display:inline-flex;align-items:center;gap:8px;border-radius:24px;padding:8px 12px;background:#ecf8f0;color:#176537;font-weight:700;font-size:14px}.dot{width:9px;height:9px;border-radius:50%;background:#1aaf57}p{line-height:1.6;color:#53627a}.note{border-left:3px solid #286de5;background:#f4f7ff;padding:12px 14px;border-radius:6px;margin:24px 0}.button{display:block;text-align:center;text-decoration:none;border-radius:11px;padding:14px;background:#266de0;color:#fff;font-weight:750;margin-top:18px}.small{font-size:13px;color:#64748b;margin:16px 0 0}
+</style></head><body><main>
+<div class="eyebrow">BOCA BOT · SERVIDOR</div><h1>Servidor conectado</h1>
+<div class="status"><span class="dot"></span>API disponible en Render</div>
+<p>Esta es la parte técnica que ejecuta Playwright. El panel para elegir partido y sectores está en otra dirección.</p>
+<div class="note"><strong>Importante:</strong> servidor disponible no significa que el monitor esté buscando entradas. Faltan la sesión autenticada de Boca Socios, el mapeo de sectores y la integración con el panel.</div>
+<a class="button" href="https://bocabot.vercel.app">Abrir panel de Boca Bot</a>
+<p class="small">Prueba técnica: <a href="/health">ver respuesta de salud del servidor</a> (JSON).</p>
+</main></body></html>"""
 
 
 @app.get("/health")
