@@ -1,5 +1,11 @@
 node_modules
 .next
-.env*
 .vercel
-.DS_Store
+.env
+.env.*
+*.pyc
+__pycache__/
+boca_session.json
+boca_auth_profile/
+.boca_solidario_browser/
+test-results/
