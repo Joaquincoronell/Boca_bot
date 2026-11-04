@@ -9,3 +9,4 @@ boca_session.json
 boca_auth_profile/
 .boca_solidario_browser/
 test-results/
+.boca_bot_data/
